@@ -221,10 +221,6 @@ class TestTryingToBreakOut(DRYTest):
         # it only evaluates the first statement:
         self.t("a = 11; x = 21; x + x", 11)
 
-        # list comprehensions don't work:
-        # this could be changed in a future release, if people want...
-        with self.assertRaises(simpleeval.FeatureNotAvailable):
-            self.t("[x for x in (1, 2, 3)]", (1, 2, 3))
 
 class TestNames(DRYTest):
     ''' 'names', what other languages call variables... '''
