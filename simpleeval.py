@@ -337,6 +337,10 @@ class SimpleEval(object): # pylint: disable=too-few-public-methods
                             out.append(self._eval(node.elt))
             return out
             
+        # lists
+        elif isinstance(node, ast.List):
+            return [self._eval(e) for e in node.elts]
+            
         else:
             raise FeatureNotAvailable("Sorry, {0} is not available in this "
                                       "evaluator".format(type(node).__name__ ))
