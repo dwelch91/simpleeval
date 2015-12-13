@@ -322,6 +322,21 @@ class SimpleEval(object): # pylint: disable=too-few-public-methods
             if node.step is not None:
                 step = self._eval(node.step)
             return slice(lower, upper, step)
+        
+        # list comprehensions: [ x for x in y if z ]
+        elif isinstance(node, ast.ListComp):
+            out = []
+            for tnode in node.generators:
+                if tnode.__class__ == ast.comprehension:
+                    for val in self._eval(tnode.iter):
+                        self.names[tnode.target.id] = val
+                        add = True
+                        for cond in tnode.ifs:
+                            add = add and self._eval(cond)
+                        if add:
+                            out.append(self._eval(node.elt))
+            return out
+            
         else:
             raise FeatureNotAvailable("Sorry, {0} is not available in this "
                                       "evaluator".format(type(node).__name__ ))
