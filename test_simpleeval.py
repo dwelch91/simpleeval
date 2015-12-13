@@ -375,6 +375,12 @@ class Test_simple_eval(unittest.TestCase):
     def test_default_functions(self):
         self.assertEqual(simple_eval('rand() < 1.0 and rand() > -0.01'), True)
         self.assertEqual(simple_eval('randint(200) < 200 and rand() > 0'), True)
+        
+class Test_list_comp(DRYTest):
+    def test_list_comp(self):
+        self.s.names = {'y': [1, 2, 3, 4]}
+        self.t('[x**2 for x in y]', [1, 4, 9, 16])
+        self.t('[x for x in y if x % 2 == 0]', [2, 4])
 
 if __name__ == '__main__':
     unittest.main()
