@@ -341,7 +341,16 @@ class SimpleEval(object): # pylint: disable=too-few-public-methods
         elif isinstance(node, ast.List):
             return [self._eval(e) for e in node.elts]
             
-        else:
+        # tuples
+        elif isinstance(node, ast.Tuple): 
+                return tuple([self._eval(e) for e in node.elts])
+
+        # dicts
+        elif isinstance(node, ast.Dict):
+                return dict([(self._eval(k), self._eval(v)) for k, v in
+                                zip(node.keys, node.values)])
+            
+        else:   
             raise FeatureNotAvailable("Sorry, {0} is not available in this "
                                       "evaluator".format(type(node).__name__ ))
 
