@@ -266,8 +266,7 @@ class SimpleEval(object): # pylint: disable=too-few-public-methods
                                          else self._eval(node.orelse)
         elif isinstance(node, ast.Call): # function...
             try:
-                return self.functions[node.func.id](*(self._eval(a)
-                                                      for a in node.args))
+                return self.functions[node.func.id](*[self._eval(a) for a in node.args])
             except KeyError:
                 raise FunctionNotDefined(node.func.id, self.expr)
 
@@ -313,6 +312,7 @@ class SimpleEval(object): # pylint: disable=too-few-public-methods
 
         elif isinstance(node, ast.Index):
             return self._eval(node.value)
+        
         elif isinstance(node, ast.Slice):
             lower = upper = step = None
             if node.lower is not None:
